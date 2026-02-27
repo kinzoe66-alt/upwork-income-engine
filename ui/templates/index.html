@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upwork Income Engine</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; }
+    textarea { width: 100%; max-width: 900px; }
+    .box { margin-top: 16px; padding: 12px; border: 1px solid #ddd; max-width: 900px; }
+    .k { font-family: monospace; }
+  </style>
+</head>
+<body>
+  <h2>Job Evaluation Engine</h2>
+
+  <form method="POST">
+    <textarea name="job_text" rows="14" placeholder="Paste job description here...">{{ job_text }}</textarea><br><br>
+    <button type="submit">Evaluate</button>
+  </form>
+
+  {% if result %}
+    <div class="box">
+      <h3>Score: {{ result.score }}</h3>
+      <h3>Decision: {{ result.decision }}</h3>
+
+      <h4>Signals</h4>
+      {% if result.hits %}
+        <ul>
+          {% for h in result.hits %}
+            <li class="k">{{ h.key }} ({{ "%+d"|format(h.weight) }})</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div>(none)</div>
+      {% endif %}
+
+      <h4>Notes</h4>
+      {% if result.notes %}
+        <ul>
+          {% for n in result.notes %}
+            <li>{{ n }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div>(none)</div>
+      {% endif %}
+
+      <h4>Artifacts</h4>
+      <ul>
+        <li class="k">Report: {{ artifacts.report_file }}</li>
+        <li class="k">Export: {{ artifacts.export_file }}</li>
+        <li class="k">Log: {{ artifacts.log_file }}</li>
+      </ul>
+    </div>
+  {% endif %}
+</body>
+</html>
